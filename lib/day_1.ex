@@ -1,8 +1,14 @@
 defmodule AOC.Day1 do
+  @moduledoc """
+  https://adventofcode.com/2018/day/1
+  """
+
+  @spec part_1([integer()]) :: integer()
   def part_1(input \\ input()) do
     Enum.sum(input)
   end
 
+  @spec part_2([integer()]) :: integer()
   def part_2(input \\ input()) do
     do_part_2(input)
   end
