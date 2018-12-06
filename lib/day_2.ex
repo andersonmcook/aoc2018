@@ -47,8 +47,7 @@ defmodule AOC.Day2 do
     |> Enum.max_by(&Kernel.elem(&1, 0))
     |> Kernel.elem(1)
     |> (fn {s1, s2} -> String.myers_difference(s1, s2) end).()
-    |> Keyword.take([:eq])
-    |> Keyword.values()
+    |> Keyword.get_values(:eq)
     |> Enum.join()
   end
 
