@@ -3,11 +3,28 @@ defmodule AOC.Day1 do
   https://adventofcode.com/2018/day/1
   """
 
+  @doc """
+  iex> AOC.Day1.part_1([1, -2, 3, 1])
+  3
+  """
   @spec part_1([integer()]) :: integer()
   def part_1(input \\ input()) do
     Enum.sum(input)
   end
 
+  @doc """
+  iex> AOC.Day1.part_2([1, -1])
+  1
+
+  iex> AOC.Day1.part_2([3, 3, 4, -2, -4])
+  10
+
+  iex> AOC.Day1.part_2([-6, 3, 8, 5, -6])
+  5
+
+  iex> AOC.Day1.part_2([7, 7, -2, -7, -4])
+  14
+  """
   @spec part_2([integer()]) :: integer()
   def part_2(input \\ input()) do
     do_part_2(input)
