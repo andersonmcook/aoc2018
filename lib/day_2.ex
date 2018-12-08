@@ -36,21 +36,18 @@ defmodule AOC.Day2 do
   def part_2(input \\ input()) do
     # Version 3 (~0.2 seconds)
     input
+    |> Enum.reverse()
     |> Task.async_stream(fn string ->
       input
-      |> Enum.drop_while(&(&1 != string))
+      |> Enum.take_while(&(&1 != string))
       |> Enum.reduce({0.0, {"", ""}}, fn curr, acc ->
-        if curr == string do
-          acc
-        else
-          {best, _} = acc
-          distance = String.jaro_distance(string, curr)
+        {best, _} = acc
+        distance = String.jaro_distance(string, curr)
 
-          if distance > best do
-            {distance, {string, curr}}
-          else
-            acc
-          end
+        if distance > best do
+          {distance, {string, curr}}
+        else
+          acc
         end
       end)
     end)
