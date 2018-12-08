@@ -34,21 +34,73 @@ defmodule AOC.Day2 do
   "fgij"
   """
   def part_2(input \\ input()) do
+    # Version 3 (~0.2 seconds)
     input
-    |> Enum.reduce(%{}, fn curr1, acc1 ->
-      Enum.reduce(input, acc1, fn curr2, acc2 ->
-        if curr1 == curr2 do
-          acc2
+    |> Task.async_stream(fn string ->
+      input
+      |> Enum.drop_while(&(&1 != string))
+      |> Enum.reduce({0.0, {"", ""}}, fn curr, acc ->
+        if curr == string do
+          acc
         else
-          Map.put(acc2, String.jaro_distance(curr1, curr2), {curr1, curr2})
+          {best, _} = acc
+          distance = String.jaro_distance(string, curr)
+
+          if distance > best do
+            {distance, {string, curr}}
+          else
+            acc
+          end
         end
       end)
     end)
-    |> Enum.max_by(&Kernel.elem(&1, 0))
-    |> Kernel.elem(1)
-    |> (fn {s1, s2} -> String.myers_difference(s1, s2) end).()
+    |> Enum.max_by(fn {:ok, {n, _}} -> n end)
+    |> (fn {:ok, {_, {s1, s2}}} -> String.myers_difference(s1, s2) end).()
     |> Keyword.get_values(:eq)
     |> Enum.join()
+
+    # Version 2 (~0.775 seconds)
+    # input
+    # |> Enum.reduce({0.0, {"", ""}}, fn curr1, acc1 ->
+    #   input
+    #   |> Enum.drop_while(& &1 != curr1)
+    #   |> Enum.reduce(acc1, fn curr2, acc2 ->
+    #     {best, {_, s2}} = acc2
+
+    #     if curr1 == curr2 or curr1 == s2 do
+    #       acc2
+    #     else
+    #       distance = String.jaro_distance(curr1, curr2)
+
+    #       if distance > best do
+    #         {distance, {curr1, curr2}}
+    #       else
+    #         acc2
+    #       end
+    #     end
+    #   end)
+    # end)
+    # |> Kernel.elem(1)
+    # |> (fn {s1, s2} -> String.myers_difference(s1, s2) end).()
+    # |> Keyword.get_values(:eq)
+    # |> Enum.join()
+
+    # Version 1 (~1.5 seconds)
+    # input
+    # |> Enum.reduce(%{}, fn curr1, acc1 ->
+    #   Enum.reduce(input, acc1, fn curr2, acc2 ->
+    #     if curr1 == curr2 do
+    #       acc2
+    #     else
+    #       Map.put(acc2, String.jaro_distance(curr1, curr2), {curr1, curr2})
+    #     end
+    #   end)
+    # end)
+    # |> Enum.max_by(&Kernel.elem(&1, 0))
+    # |> Kernel.elem(1)
+    # |> (fn {s1, s2} -> String.myers_difference(s1, s2) end).()
+    # |> Keyword.get_values(:eq)
+    # |> Enum.join()
   end
 
   defp input do
