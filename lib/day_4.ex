@@ -61,9 +61,10 @@ defmodule AOC.Day4 do
     end)
     |> Map.drop([:current])
     |> Enum.reduce(%{most_naps: []}, fn {id, naps}, acc ->
-      naps = naps
-      |> Enum.map(&Enum.to_list/1)
-      |> List.flatten()
+      naps =
+        naps
+        |> Enum.map(&Enum.to_list/1)
+        |> List.flatten()
 
       if length(naps) > length(acc.most_naps) do
         "#" <> n = id
